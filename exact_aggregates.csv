@@ -1,0 +1,14 @@
+key,value,description
+existing_before_spike,L1,급증 시작 전 게시된 현존 영상
+l1_spike_views,508,"L1 유효 조회수 합계, 급증 14일"
+l1_spike_daily_min,18,"L1 일별 유효 조회수 최소, 급증 14일"
+l1_spike_daily_max,68,"L1 일별 유효 조회수 최대, 급증 14일"
+l1_prior4w_daily_mean,47.9,"L1 일평균 유효 조회수, 2019-02-09~03-08"
+unlisted_views_after_spike,1181,"현존 영상 외 유효 조회수, 2019-03-23~07-21(당시 현존 영상은 L1뿐)"
+long_form_watch_h,2205.4977,롱폼 L1·L2·L3 시청 시간 합계(시간)
+L2_max_zero_run_2019_2021,6,L2 2019–2021 최장 연속 조회 0일
+L2_last_view_month,2025-07,L2 마지막 조회 월(비공개 전환일 아님)
+L3_max_zero_run_2019_2021,5,L3 2019–2021 최장 연속 조회 0일
+L3_last_view_month,2025-06,L3 마지막 조회 월(비공개 전환일 아님)
+C1_max_zero_run_2019_2021,19,C1 2019–2021 최장 연속 조회 0일
+C1_last_view_month,2023-10,C1 마지막 조회 월(비공개 전환일 아님)

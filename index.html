@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>영상 채널 성과 분석</title>
-<meta name="description" content="직접 운영한 영상 채널(2019–2021)의 YouTube Studio 데이터를 노출·클릭·시청·전환 퍼널로 사후 분석한 케이스 스터디">
+<meta name="description" content="직접 운영한 영상 채널(2019–2021)의 YouTube Studio 데이터를 집계 범위·유입 경로·KPI별 성과를 사후 분석한 케이스 스터디">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{
@@ -19,7 +19,7 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:72px}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 "Pretendard Variable",Pretendard,system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;word-break:keep-all;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 "Pretendard Variable",Pretendard,system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic","NanumGothic",sans-serif;word-break:keep-all;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
 .num{font-variant-numeric:tabular-nums}
@@ -112,6 +112,11 @@ strong{color:var(--ink);font-weight:700}
 .caps small{font-size:15px;font-weight:700;color:var(--ink)}
 .caps p{margin:0;font-size:14.5px}
 .caps span{margin-top:auto;padding-top:10px;font-size:13.5px;font-weight:600;color:var(--blue-ink)}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.roles div{background:var(--bg);border-radius:10px;padding:12px 14px}
+.roles small{display:block;font-size:12.5px;font-weight:700;color:var(--blue-ink);margin-bottom:2px}
+.roles p{font-size:14px!important;margin:0}
+.roles.one{grid-template-columns:1fr}
 .caps-note{margin:14px 0 0;font-size:14px;color:var(--slate)}
 tr.muted td{color:var(--slate)}
 .tnote{margin:0;padding:14px 28px 6px;font-size:13px;color:var(--slate);line-height:1.6;white-space:normal}
@@ -236,6 +241,7 @@ svg text{font-family:inherit}
   .qhead h3{font-size:25px}
   .ov,.grid2,.g21,.grid3,.impl,.method{grid-template-columns:1fr}
   .caps{grid-template-columns:1fr 1fr}
+  .roles{grid-template-columns:1fr}
   .sub-h{margin-top:40px}
   .meta{grid-template-columns:1fr 1fr}
   .meta div:nth-child(2){border-right:0}
@@ -251,39 +257,33 @@ svg text{font-family:inherit}
 }
 
 /* ---------- Print (A4 PDF) ---------- */
-@page{size:A4;margin:12mm}
+@page{size:A4;margin:13mm 12mm}
+.web-only{}
 @media print{
-  html{zoom:.7}
-  html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  body{font-size:11pt}
-  .nav,.ctas,.tip,.flow,.next,.nb .btn{display:none!important}
-  .wrap{max-width:none;padding:0}
-  .hero{padding:28px 24px;border-radius:12px}
-  .hero .wrap{grid-template-columns:1fr 1fr;gap:28px}
-  .hero h1{font-size:28pt}
-  .hero .lede{margin-bottom:0;font-size:11pt}
-  .panel{box-shadow:none}
-  section.block{padding:28px 0 0}
-  #analysis,#implications,#method{break-before:page}
-  .tbl{overflow:visible}
-  .qhead,.sec-title,.sec-label{break-after:avoid}
-  .sub-h{break-after:avoid;margin-top:24px}
-  .caps{break-inside:avoid;gap:10px}
-  .caps .card{box-shadow:none;transform:none}
-  .sec-title{font-size:20pt}
-  .sec-lede{margin-bottom:18px;font-size:11pt}
-  .q{margin-top:28px}
-  .qhead{grid-template-columns:1fr;gap:2px;margin-bottom:14px}
-  .qhead h3{font-size:16pt}
-  .qbody{margin-left:0}
-  .card,.fact,.insight,.kpi,.impl .card,.meta,.notice,.redo,.nb,.qhead,table{break-inside:avoid}
-  .card,.kpi{box-shadow:none!important;transform:none!important}
-  .ov,.grid2,.impl,.method{gap:12px}
-  .stack>*+*{margin-top:12px}
-  footer{padding:16px 24px;border-radius:12px;margin-top:16px}
-  a{text-decoration:none}
+ html{zoom:1}body{background:#fff;font-size:10pt;line-height:1.55;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .nav,.ctas,.tip,.flow,.next,.web-only,.nb .btn,.caps-note{display:none!important}
+ .wrap{max-width:none;padding:0}.hero{padding:20px;border-radius:10px}.hero .wrap{grid-template-columns:1fr;gap:18px}
+ .hero h1{font-size:26pt;line-height:1.25;margin-bottom:12px}.hero .lede{font-size:10pt;line-height:1.55;max-width:none}.eyebrow{font-size:9pt;margin-bottom:10px}
+ .panel{box-shadow:none;padding:14px}.panel-head{font-size:9pt}.hero-annotations{font-size:9pt;line-height:1.4}
+ section.block{padding:18px 0 0;border:0!important;background:#fff!important}
+ .sec-label{font-size:9pt;margin:0 0 4px}.sec-title{font-size:20pt;margin-bottom:8px}.sec-lede{font-size:10pt;margin-bottom:14px}
+ .ov,.grid2,.impl,.method{gap:12px}.ov,.method{grid-template-columns:1fr}.kpis{gap:8px}.kpi{padding:10px}.kpi b{font-size:18pt}
+ .meta{margin-top:10px}.meta div{padding:10px}.meta small,.meta b{font-size:9pt}.notice{padding:12px;margin-top:12px}
+ .sub-h{font-size:13pt;margin:12px 0 8px;break-after:avoid}.caps{grid-template-columns:1fr 1fr;gap:10px}.caps .card{padding:12px}
+ #analysis,#q2,#q3,#q4,#implications,#method{break-before:page}
+ .q{margin-top:16px}.qhead{grid-template-columns:1fr;gap:4px;break-after:avoid}.qhead h3{font-size:17pt;margin-bottom:6px}.qhead p{font-size:10pt}.qnum{font-size:12pt;padding:0}.qnum span{font-size:9pt;display:inline;margin-left:8px}
+ .qbody{margin-left:0}.stack>*+*{margin-top:12px}.card{padding:13px}.fact{padding:10px 12px}.fact p,.insight p,.evi p,.impl p{font-size:10pt;line-height:1.55}.insight{padding:13px;break-inside:avoid}.tag{font-size:8.5pt}
+ .card h4{font-size:12pt}.sub,.chart-title,.tnote{font-size:9pt;line-height:1.5}.tbl.card{padding:5px 0}.tbl{overflow:visible}.tbl table{min-width:0!important;table-layout:fixed;width:100%}
+ th,td{padding:7px 6px;font-size:9pt;white-space:normal!important;overflow-wrap:anywhere}th:first-child,td:first-child{padding-left:8px}
+ .grid3{grid-template-columns:1fr;gap:8px}.keep{break-inside:auto;padding-top:12px!important}.evi{padding:10px}.evi .n{display:inline-flex;margin:0 8px 4px 0}
+ .card,.fact,.kpi,.meta,.notice,.redo,.nb,table{break-inside:avoid}.card,.kpi{box-shadow:none!important;transform:none!important}
+ .impl{grid-template-columns:1fr}.impl .card{padding:14px;gap:8px}.impl h4{font-size:12pt}.impl-note{font-size:9pt;margin-bottom:12px}.chips{gap:6px}.chip{font-size:8.5pt}.kpi-next small{font-size:9pt}
+ .method .card{break-inside:auto;padding:14px}.dl div{grid-template-columns:80px 1fr;padding:8px 0;break-inside:avoid}.dl dt,.dl dd,.lim li,.redo p{font-size:10pt;line-height:1.55}.lim li{padding:8px 0 8px 18px;break-inside:avoid}
+ .sources{font-size:9pt}.nb{padding:12px;margin-top:12px}.nb p{font-size:9pt}footer{font-size:8.5pt;padding:14px 0;margin-top:15px}a{text-decoration:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.hero-annotations{display:grid;gap:7px;color:#CBD5E1;font-size:12px;line-height:1.55;margin:10px 0 22px}.hero-annotations b{color:#fff}.sources{font-size:13px;line-height:1.7;margin-top:20px;color:var(--slate)}.sources a{text-decoration:underline}.hero .panel{min-width:0}
+@media(max-width:600px){.hero-annotations{font-size:12px}.hero .panel{padding:14px}.grid2>*{min-width:0}.tbl table{min-width:660px}}
 </style>
 </head>
 <body>
@@ -297,7 +297,7 @@ svg text{font-family:inherit}
       <li><a href="#implications">시사점</a></li>
       <li><a href="#method">방법·한계</a></li>
     </ul>
-    <a class="btn btn-sm" href="analysis.ipynb">
+    <a class="btn btn-sm" href="https://github.com/bomin7740-afk/yt-channel-analysis/blob/main/analysis.ipynb" target="_blank" rel="noopener">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 2v8m0 0L4.5 6.5M8 10l3.5-3.5M3 13h10"/></svg>분석 노트북</a>
   </div>
 </nav>
@@ -306,17 +306,17 @@ svg text{font-family:inherit}
   <div class="wrap">
     <div>
       <div class="eyebrow"><i></i>사이드 프로젝트 · 미디어 성과 분석 · 2026</div>
-      <h1>조회수의 57%가<br>몰린 2주,<br><em>그 이후를 지탱한</em><br><em>유입</em>은 무엇이었나</h1>
-      <p class="lede">2019–2021년 직접 기획·편집·운영한 엔터테인먼트 팬 콘텐츠 채널의 YouTube Studio 데이터를 2026년에 다시 분석했습니다. 채널 합계와 영상별 합계를 대조해 집계 범위를 점검하고, 일별·월별 추이와 유입 경로를 나눠 성과가 어디서 나왔는지 확인했습니다.</p>
+      <h1>조회수의 57.2%가<br>집중된 14일,<br><em>유입 경로</em>는<br>어떻게 달랐을까?</h1>
+      <p class="lede">직접 운영했던 엔터테인먼트 팬 콘텐츠 채널의 2019–2021년 YouTube Studio 데이터로 채널 합계와 영상별 합계의 정합성을 점검하고, 일별 추이·유입 경로·KPI별 성과 차이를 분석했습니다. 분석 목적과 질문 설정, 데이터 추출, 결과 검토와 해석을 맡았습니다.</p>
       <div class="ctas">
         <a class="btn btn-blue" href="#analysis">분석 결과 보기
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 3v10m0 0l-4-4m4 4l4-4"/></svg></a>
-        <a class="btn btn-ghost" href="analysis.ipynb">분석 노트북 보기</a>
+        <a class="btn btn-ghost" href="https://github.com/bomin7740-afk/yt-channel-analysis/blob/main/analysis.ipynb" target="_blank" rel="noopener">분석 노트북 보기</a>
       </div>
     </div>
     <div class="panel" aria-label="채널 주간 조회수와 주요 지표">
       <div class="panel-head"><b>주간 조회수</b><span>2019.01 – 2021.12 · 로그 스케일</span></div>
-      <svg class="ch" id="hero" viewBox="0 0 520 220" role="img" aria-label="주간 조회수 추이. 2019년 3월 14일간 급증 후 검색 유입 중심으로 2020년 이후 감소"></svg>
+      <svg class="ch" id="hero" viewBox="0 0 520 220" role="img" aria-label="주간 조회수 추이. 2019년 3월 9–22일 급증, 그 외 기간은 검색 유입 중심"></svg><div class="hero-annotations"><span><b>57.2%</b> · 2019.03.09–22, 14일 합계 / 분석 기간 조회수</span><span><b>83.4%</b> · 급증 14일 외 기간의 검색 조회수 비중</span></div>
       <p class="cap" style="margin-top:14px">퍼널 관점의 주요 지표 · 채널 합계</p>
       <div class="funnel">
         <div class="fstep"><small>노출</small><b class="num">287만</b><span>썸네일 노출수</span></div>
@@ -334,7 +334,7 @@ svg text{font-family:inherit}
   <div class="wrap">
     <p class="sec-label">Project Overview</p>
     <h2 class="sec-title">데이터가 맞지 않는 지점에서 시작했습니다</h2>
-    <p class="sec-lede">현재 확인 가능한 9개 영상의 조회수를 합쳐도 채널 합계의 41.4%밖에 되지 않았고, 2019년 3월의 14일 동안 하루 조회수가 평소의 100배 이상으로 늘었다가 하루 만에 급감했습니다.</p>
+    <p class="sec-lede">현재 확인 가능한 9개 영상의 조회수를 합쳐도 채널 합계의 41.4%밖에 되지 않았고, 2019년 3월 9–22일에는 일별 조회수가 386–14,278회로 직전 4주 일평균(75회)보다 크게 많았다가 3월 23일 46회로 감소했습니다.</p>
 
     <div class="ov">
       <div class="card">
@@ -350,7 +350,7 @@ svg text{font-family:inherit}
       <div class="kpis">
         <div class="kpi"><small>썸네일 노출수</small><b class="num">287만</b></div>
         <div class="kpi"><small>썸네일 CTR</small><b class="num">3.42%</b></div>
-        <div class="kpi"><small>조회수 (반복 시청 포함)</small><b class="num">12.4만</b></div>
+        <div class="kpi"><small>조회수 (유효 조회수 기준)</small><b class="num">12.4만</b></div>
         <div class="kpi"><small>총 시청 시간</small><b class="num">5,750시간</b></div>
         <div class="kpi wide"><div><small>구독 순증가 (신규 − 취소)</small><b class="num">+218명</b></div><small style="text-align:right;max-width:240px">채널 합계, 2019-01-13 ~ 2021-12-31<br>전체 기간(~2026-10-31) 조회수의 95.5%</small></div>
       </div>
@@ -360,18 +360,21 @@ svg text{font-family:inherit}
       <div><small>분석 기간</small><b class="num">2019.01.13 – 2021.12.31</b></div>
       <div><small>데이터 출처</small><b>YouTube Studio 고급 모드 CSV</b></div>
       <div><small>역할</small><b>2019–21 채널 운영 · 2026 분석</b></div>
-      <div><small>도구</small><b>Python · pandas · Jupyter</b></div>
+      <div><small>분석 환경</small><b>YouTube Studio CSV · Python 노트북</b></div>
     </div>
 
     <div class="notice">
       <div class="ico">i</div>
       <div>
-        <p>유료 광고를 집행한 경험이 아니라, 직접 운영했던 채널의 데이터를 2026년에 <strong>사후 분석</strong>한 프로젝트입니다. 채널 운영 당시에는 콘텐츠 기획·편집·게시를, 이번 분석에서는 데이터 추출·정합성 점검·Python 분석·리포트 작성을 했습니다. 채널명·영상 제목·영상 ID는 공개하지 않으며, 영상은 유형 코드(L1, S1 …)로 표기합니다.</p>
+        <p>유료 광고를 집행한 경험이 아니라, 직접 운영했던 채널의 성과 데이터를 2026년에 <strong>사후 분석</strong>한 프로젝트입니다.</p>
+        <div class="roles one">
+          <div><small>수행 역할</small><p>2019–21 채널 운영(콘텐츠 기획·편집·게시) · 분석 목적과 질문 설정 · YouTube Studio 데이터 추출 · 결과 검토와 해석·수정 판단. 코드 작성 방식은 <a href="#method" style="color:var(--blue-ink);border-bottom:1px solid currentColor">방법과 한계</a>에 적었습니다.</p></div>
+        </div>
         <div class="legend-tags"><span><span class="tag f">사실</span>원본 관측값 또는 그 합·차·비율</span><span><span class="tag r">참고</span>가정을 둔 계산값</span><span><span class="tag e">추정</span>근거는 있으나 직접 확인 불가</span><span><span class="tag h">가설</span>검증되지 않은 해석</span></div>
       </div>
     </div>
 
-    <h3 class="sub-h">이 프로젝트에서 보여주는 역량</h3>
+    <h3 class="sub-h">이 프로젝트에서 다룬 분석과 직무 연결</h3>
     <div class="caps">
       <div class="card lift"><small>데이터 정합성 확인</small><p>채널 합계와 영상별 합계의 차이를 발견하고, 지표별로 집계 범위를 점검했습니다.</p><span>→ 데일리 리포트의 정확성</span></div>
       <div class="card lift"><small>성과 모니터링</small><p>일별 급증·급감과 월별 추세를 구분해 성과가 발생한 시점을 확인했습니다.</p><span>→ 광고 집행 효과 분석·데일리 리포트</span></div>
@@ -391,8 +394,8 @@ svg text{font-family:inherit}
 
     <div class="flow">
       <a href="#q1"><small>Q1 · 정합성</small><b>조회수의 58.6%는 현존 영상 목록 밖에 있었다</b></a>
-      <a href="#q2"><small>Q2 · 모니터링</small><b>57%가 몰린 14일, 나머지 기간은 검색이 지탱했다</b></a>
-      <a href="#q3"><small>Q3 · 유입 경로</small><b>경로 간 지표 차이를 우열로 읽지 않았다</b></a>
+      <a href="#q2"><small>Q2 · 모니터링</small><b>57.2%가 집중된 14일과 나머지 기간의 유입 구조</b></a>
+      <a href="#q3"><small>Q3 · 유입 경로</small><b>검색과 추천의 CTR·시청 지속 시간은 다르게 나타났다</b></a>
       <a href="#q4"><small>Q4 · KPI</small><b>KPI에 따라 영상 평가가 달라졌다</b></a>
     </div>
 
@@ -410,7 +413,7 @@ svg text{font-family:inherit}
           <table>
             <thead><tr><th>지표 (2019–2021)</th><th>채널 합계</th><th>현존 9개 영상 합계</th><th>차이</th><th>차이 비중</th></tr></thead>
             <tbody>
-              <tr><td>조회수</td><td>123,577회</td><td>51,168회</td><td>72,409회</td><td class="hl">58.6%</td></tr>
+              <tr><td>유효 조회수</td><td>123,577회</td><td>51,168회</td><td>72,409회</td><td class="hl">58.6%</td></tr>
               <tr><td>시청 시간</td><td>5,749.6시간</td><td>2,474.0시간</td><td>3,275.6시간</td><td class="hl">57.0%</td></tr>
               <tr><td>썸네일 노출수</td><td>2,868,407회</td><td>292,404회</td><td>2,576,003회</td><td class="hl">89.8%</td></tr>
               <tr class="muted"><td>구독 순증가</td><td>+218명</td><td>+77명</td><td>+141명</td><td>귀속하지 않음</td></tr>
@@ -418,7 +421,7 @@ svg text{font-family:inherit}
           </table>
         </div>
         <div class="facts">
-          <div class="fact"><p><span class="tag f">사실</span>조회수·시청 시간·노출수는 영상별 값을 더하면 채널 합계가 되는 지표입니다. YouTube는 삭제된 콘텐츠의 기록도 채널 합계에 남기므로, 차이는 <strong>현존 영상 목록에서 확인되지 않는 성과(잔여분)</strong>로 볼 수 있습니다. 현존 영상 목록이 완전하다는 전제의 계산입니다.</p></div>
+          <div class="fact"><p><span class="tag f">사실</span>동일 기간·필터에서 모든 콘텐츠가 포함되면 조회수·시청 시간·노출수는 합산 가능한 지표입니다. YouTube는 삭제된 콘텐츠의 기록도 채널 합계에 남기므로, 차이는 <strong>현존 영상 목록에서 확인되지 않는 성과(잔여분)</strong>로 볼 수 있습니다. 현존 영상 목록이 완전하다는 전제의 계산입니다.</p></div>
           <div class="fact"><p><span class="tag f">사실</span>구독은 다릅니다. 채널 구독은 영상 시청 페이지 외에 채널 페이지 등에서도 발생할 수 있어, 채널 합계와 영상별 합계의 집계 범위가 같다고 볼 수 없습니다. 그래서 구독 차이 +141명은 <strong>집계 범위 차이로만 표시하고 특정 영상의 성과로 귀속하지 않았습니다.</strong></p></div>
         </div>
         <div class="insight"><small>INSIGHT</small><p>영상별 값을 다시 더해 보는 것만으로 조회수의 58.6%가 현재 목록 밖에 있다는 것을 확인했습니다. <strong>합계와 세부 항목의 범위가 같은지 먼저 맞추는 일이 해석의 출발점</strong>이고, 범위가 다른 지표는 차이를 귀속하지 않는 것이 맞습니다.</p></div>
@@ -431,12 +434,12 @@ svg text{font-family:inherit}
       <div class="qhead">
         <div class="qnum">Q2<span>일별·월별 모니터링</span></div>
         <div>
-          <h3>조회수의 57%가 몰린 14일, 나머지 기간은 검색이 지탱했다</h3>
+          <h3>조회수의 57.2%가 집중된 14일, 나머지 기간의 주요 유입 경로는 검색이었다</h3>
           <p>급증 14일과 나머지 기간의 유입 구조는 같았나?</p>
         </div>
       </div>
       <div class="qbody stack">
-        <div class="fact"><p><span class="tag f">사실</span>2019년 3월 9–22일 일별 조회수가 평소(하루 수십 회)의 100배 이상으로 늘었고, 3월 22일 14,278회에서 다음 날 46회로 급감했습니다. 이 14일의 조회수 70,636회는 분석 기간 조회수의 <strong>57.2%</strong>입니다.</p></div>
+        <div class="fact"><p><span class="tag f">사실</span>2019년 3월 9–22일 일별 조회수는 386–14,278회(일평균 5,045회)로, 직전 4주 일평균 75회의 약 5–189배였습니다. 3월 22일 14,278회에서 다음 날 46회로 감소했습니다. 이 14일의 조회수 70,636회는 분석 기간 조회수의 <strong>57.2%</strong>입니다.</p></div>
         <div class="card lift">
           <h4>기간별 유입 경로 구성</h4>
           <p class="sub">조회수 비중, 2019–2021</p>
@@ -455,20 +458,20 @@ svg text{font-family:inherit}
             <div><p class="chart-title">나머지 기간의 검색 비중</p><div class="bigstat"><b class="num">83.4%</b></div></div>
           </div>
         </div>
-        <div class="fact"><p><span class="tag f">사실</span>급증 14일 조회수의 96.9%는 <strong>추천 동영상·탐색 기능</strong>에서, 급증 14일을 제외한 나머지 기간 조회수 52,941회의 83.4%는 <strong>YouTube 검색</strong>에서 발생했습니다. 채널의 추천 동영상 유입 전체 중 98.7%가 이 14일에 몰려 있습니다. 검색 유입은 관찰 기간 내내 매달 발생했고 2020년 이후 전반적으로 감소했으며, 감소 원인은 확인하지 않았습니다.</p></div>
-        <div class="insight"><small>INSIGHT</small><p>단기 급증과 나머지 기간의 기본 성과는 유입 구조가 달랐습니다. <strong>하나의 합계로 묶으면 성격이 다른 두 성과가 섞여</strong>, 급증이 끝난 뒤 채널을 지탱한 검색 유입의 규모를 제대로 볼 수 없습니다.</p></div>
+        <div class="fact"><p><span class="tag f">사실</span>급증 14일 조회수의 96.9%는 <strong>추천 동영상·탐색 기능</strong>에서, 급증 14일을 제외한 나머지 기간 조회수 52,941회의 83.4%는 <strong>YouTube 검색</strong>에서 발생했습니다. 채널의 추천 동영상 유입 전체 중 98.7%가 이 14일에 몰려 있습니다. 검색 유입은 관찰 기간 내내 매달 발생했고 2020년 이후 전반적으로 감소했습니다. 관측된 구성비이며, 검색이 성과를 만들었다는 인과관계나 감소 원인은 확인하지 않았습니다.</p></div>
+        <div class="insight"><small>INSIGHT</small><p>급증 14일과 나머지 기간의 관측 성과는 유입 구조가 달랐습니다. <strong>하나의 합계로 묶으면 성격이 다른 두 성과가 섞여</strong>, 급증 14일 외 기간의 주요 유입 경로가 검색(83.4%)이었다는 사실이 드러나지 않습니다.</p></div>
 
-        <div style="padding-top:28px">
+        <div class="keep" style="padding-top:28px">
           <h4 style="font-size:22px;letter-spacing:-.02em;margin:0 0 16px">급증 조회수는 어디서 나왔나</h4>
-        </div>
         <div class="grid3">
-          <div class="card evi lift"><div class="n">1</div><p><span class="tag f">사실</span>급증 당시 게시돼 있던 현존 영상은 L1 하나였고, L1의 같은 기간 일별 조회수는 하루 18–68회로 직전 4주 평균(48회)과 같은 수준이었습니다.</p></div>
-          <div class="card evi lift"><div class="n">2</div><p><span class="tag f">사실</span>급증 14일 조회수에서 L1(508회)을 빼면 70,128회가 현존 영상 목록 밖에서 발생했고, 이는 Q1 잔여분 조회수의 96.8%입니다.</p></div>
-          <div class="card evi lift"><div class="n">3</div><p><span class="tag f">사실</span>운영자 기록상 저작권 문제로 삭제된 영상(예능 하이라이트 편집, 4분 32초)이 있습니다. 삭제 날짜 기록은 없습니다.</p></div>
+          <div class="card evi lift"><div class="n">1</div><p><span class="tag f">사실</span>급증 당시 게시돼 있던 현존 영상은 L1 하나였습니다. L1의 급증기 일평균은 36.3회(하루 18–68회), 직전 4주는 47.9회로, 채널 전체와 같은 급증은 나타나지 않았습니다.</p></div>
+          <div class="card evi lift"><div class="n">2</div><p><span class="tag f">사실</span>급증 14일 조회수에서 L1(508회)을 뺀 70,128회는 현존 목록 밖 성과입니다. 급증기 조회수의 99.3%이며, Q1의 전체 잔여분 72,409회 중에서는 96.8%입니다.</p></div>
+          <div class="card evi lift"><div class="n">3</div><p><span class="tag f">사실</span>YouTube Studio 콘텐츠 목록에 '삭제됨'으로 표시된 영상(예능 하이라이트 편집, 길이 2–5분)이 1개 있습니다. 삭제 날짜와 사유는 기록으로 확인하지 못했습니다.</p></div>
+        </div>
         </div>
         <div class="facts">
-          <div class="fact"><p><span class="tag e">추정</span>급증 콘텐츠는 이 삭제 영상일 가능성이 높습니다. 다만 3월 22일의 급감이 삭제 때문인지는 날짜 기록이 없어 확정하지 않았고, 급증 이후(3월 23일–7월 21일)에도 현존 영상으로 설명되지 않는 조회수가 1,181회 있어 삭제 콘텐츠가 1개보다 많았을 가능성도 있습니다.</p></div>
-          <div class="fact"><p><span class="tag r">참고</span>잔여분의 평균 시청 시간(시청 시간 ÷ 조회수 ≈ 2분 43초)은 4분 32초보다 짧아 위 추정과 모순되지 않습니다. 같은 조회 기록에서 나온 값이라 독립적인 근거로 쓰지는 않았습니다.</p></div>
+          <div class="fact"><p><span class="tag e">추정</span>확인된 삭제 영상이 급증에 기여했을 가능성은 있지만, 영상별 기록이 없어 기여 규모는 확인하지 못했습니다. 3월 23일의 급감 이후(3월 23일–7월 21일)에도 현존 목록 밖 조회수가 1,181회 발생했습니다. 따라서 조회수 급감 시점과 삭제 시점을 동일하게 볼 수 없습니다. 특정 영상의 기여, 삭제 시점·개수·원인은 미확인입니다.</p></div>
+          <div class="fact"><p><span class="tag r">참고</span>잔여분의 평균 시청 지속 시간은 약 2분 43초입니다(잔여 시청 시간 × 3,600 ÷ 잔여 조회수). 여러 콘텐츠가 섞였을 수 있는 집계값이므로, 특정 삭제 영상을 식별하는 근거로 사용하지 않았습니다.</p></div>
           <div class="fact"><p><span class="tag f">사실</span>채널 일별 구독 순증가는 급증 14일에 +205명, 나머지 기간에 +13명이었습니다. 기간별 순증가를 나열한 것이며, 같은 시청자 집단의 전환율이나 인과 효과로 해석하지 않았습니다.</p></div>
         </div>
         <div class="next">추천과 검색은 지표도 달랐다. 이 차이는 어떻게 읽어야 할까? <a href="#q3">Q3로</a></div>
@@ -480,14 +483,14 @@ svg text{font-family:inherit}
       <div class="qhead">
         <div class="qnum">Q3<span>유입 경로</span></div>
         <div>
-          <h3>경로 간 지표 차이를 경로의 우열로 읽지 않았다</h3>
+          <h3>검색은 CTR이 높았지만, 평균 시청 지속 시간의 차이는 작았다</h3>
           <p>유입 경로별 지표 차이는 어떻게 해석해야 하나?</p>
         </div>
       </div>
       <div class="qbody stack">
         <div class="card tbl">
           <table>
-            <thead><tr><th>유입 경로 (2019–2021)</th><th>노출 비중</th><th>CTR</th><th>조회 비중</th><th>평균 조회율</th><th>평균 시청 시간</th></tr></thead>
+            <thead><tr><th>유입 경로 (2019–2021)</th><th>노출 비중</th><th>CTR</th><th>조회 비중</th><th>평균 조회율</th><th>평균 시청 지속 시간</th></tr></thead>
             <tbody>
               <tr><td>추천 동영상</td><td>84.3%</td><td>1.84%</td><td>46.6%</td><td>57.6%</td><td>2:45</td></tr>
               <tr><td>YouTube 검색</td><td>9.2%</td><td>15.39%</td><td>36.7%</td><td>10.4%</td><td>2:23</td></tr>
@@ -508,7 +511,7 @@ svg text{font-family:inherit}
           </div>
         </div>
         <div class="facts">
-          <div class="fact"><p><span class="tag f">사실</span>추천은 노출 비중이 크고 CTR이 낮았고, 검색은 노출 비중이 작고 CTR이 약 8배 높았습니다. 평균 조회율도 추천 57.6%, 검색 10.4%로 크게 달랐습니다.</p></div>
+          <div class="fact"><p><span class="tag f">사실</span>검색 CTR은 15.39%로 추천(1.84%)의 약 8.4배였습니다. 평균 조회율은 추천 57.6%, 검색 10.4%였지만, 평균 시청 지속 시간은 추천 2분 45초·검색 2분 23초로 22초 차이였습니다. 각 지표가 보여주는 성과의 모습은 달랐습니다.</p></div>
           <div class="fact"><p><span class="tag r">참고</span>노출수 × CTR은 약 9.8만 회로, 전체 조회수 12.4만 회보다 작습니다. 모든 조회가 집계 대상 썸네일 노출에서 발생하지는 않기 때문입니다. 그래서 이 분석은 같은 사람을 단계별로 추적한 퍼널이 아니라, <strong>퍼널 관점에서 관련 지표를 나란히 본 것</strong>입니다.</p></div>
         </div>
         <div class="insight"><small>INSIGHT</small><p>경로별 평균 조회율 차이에는 유입 이용자의 특성뿐 아니라 각 경로로 소비된 <strong>영상의 길이와 콘텐츠 구성 차이</strong>가 함께 영향을 미쳤을 수 있습니다. 같은 시간을 시청했다면 긴 영상일수록 조회율은 낮게 나옵니다. 영상별 유입 경로 자료가 없어 이 효과를 분리할 수 없으므로, 현재 집계만으로 경로 자체의 시청 품질을 판단하지 않았습니다. CTR 역시 콘텐츠·노출 대상·이용 의도의 영향을 받아, 경로의 우열로 해석하지 않았습니다.</p></div>
@@ -522,31 +525,31 @@ svg text{font-family:inherit}
         <div class="qnum">Q4<span>KPI 선택</span></div>
         <div>
           <h3>어떤 KPI를 쓰느냐에 따라 영상 평가가 달라졌다</h3>
-          <p>이번 비교 대상에서는 짧은 영상이 평균 조회율에서, 긴 음성 콘텐츠가 평균 시청 시간에서 높은 값을 보였습니다.</p>
+          <p>이번 비교 대상에서는 짧은 영상이 평균 조회율에서, 긴 음성 콘텐츠가 평균 시청 지속 시간에서 높은 값을 보였습니다.</p>
         </div>
       </div>
       <div class="qbody stack">
         <div class="card lift">
           <h4>영상별 시청 성과</h4>
-          <p class="sub">영상 길이순 · 조회 30회인 P1 제외 · 막대에 마우스를 올리면 같은 영상이 양쪽과 표에서 함께 강조됩니다</p>
+          <p class="sub">영상 길이순 · 조회 30회인 P1 제외<span class="web-only"> · 막대에 마우스를 올리면 같은 영상이 양쪽과 표에서 함께 강조됩니다</span></p>
           <div class="legend"><span><i style="background:var(--blue)"></i>롱폼 음성 콘텐츠 (20분 이상)</span><span><i style="background:var(--slate)"></i>그 외 영상</span></div>
           <div class="grid2">
             <div><p class="chart-title">평균 조회율 (%)</p><svg class="ch" id="pct" viewBox="0 0 380 330" role="img" aria-label="영상별 평균 조회율"></svg></div>
-            <div><p class="chart-title">평균 시청 시간 (초)</p><svg class="ch" id="avg" viewBox="0 0 380 330" role="img" aria-label="영상별 평균 시청 시간"></svg></div>
+            <div><p class="chart-title">평균 시청 지속 시간 (초)</p><svg class="ch" id="avg" viewBox="0 0 380 330" role="img" aria-label="영상별 평균 시청 지속 시간"></svg></div>
           </div>
         </div>
         <div class="card tbl">
           <table>
-            <thead><tr><th>코드</th><th style="text-align:left">유형</th><th>게시일</th><th>길이</th><th>노출수</th><th>CTR</th><th>조회수</th><th>총 시청 시간</th></tr></thead>
+            <thead><tr><th>코드</th><th style="text-align:left">유형</th><th>게시 연도</th><th>길이 구간</th><th>노출수</th><th>CTR</th><th>유효 조회수</th><th>총 시청 시간</th></tr></thead>
             <tbody id="vtbl"></tbody>
           </table>
-          <p class="tnote">* 노출 5,000회 미만 영상의 CTR은 참고값입니다. 5,000회는 소량 데이터의 영향을 줄이려고 정한 탐색 기준이며, 통계적 신뢰도 기준이 아닙니다. 누적값은 영상마다 게시 시점이 달라 '분석 기간의 채널 성과 기여도'로 읽어야 합니다.</p>
+          <p class="tnote">영상별 값은 공개용으로 반올림했습니다(노출수 100 · 조회수 10 · 평균 시청 지속 시간 10초 단위, 평균 조회율 정수). 채널 합계와 비율은 원본 값으로 계산했으며, 현존 9개 영상의 공개값 합계와 원본 합계의 차이는 0.05% 이내입니다(노트북 6절).<br>* 노출 5,000회 미만 영상의 CTR은 참고값입니다. 5,000회는 소량 데이터의 영향을 줄이려고 정한 탐색 기준이며, 통계적 신뢰도 기준이 아닙니다. 누적값은 영상마다 게시 시점이 달라 '분석 기간의 채널 성과 기여도'로 읽어야 합니다.</p>
         </div>
         <div class="facts">
-          <div class="fact"><p><span class="tag f">사실</span>롱폼 L1·L2·L3의 평균 조회율은 11–16%였지만 평균 시청 시간은 210–273초였고, 세 영상이 분석 기간 채널 시청 시간의 <strong>38.4%</strong>를 차지했습니다. 5분 미만 영상은 평균 조회율 26–79%, 평균 시청 시간 32–59초였습니다.</p></div>
-          <div class="fact"><p><span class="tag h">가설</span>CTR이 가장 높은 L1(17.04%)과 S1(19.12%)은 검색 유입 비중이 높았기 때문일 수 있습니다. 영상별 유입 경로를 확보하지 않아 검증하지 못했습니다.</p></div>
+          <div class="fact"><p><span class="tag f">사실</span>롱폼 L1·L2·L3의 평균 조회율은 11–16%였지만 평균 시청 지속 시간은 약 210–270초였고, 세 영상이 분석 기간 채널 시청 시간의 <strong>38.4%</strong>를 차지했습니다. 5분 미만 영상은 평균 조회율 26–79%, 평균 시청 지속 시간 약 30–60초였습니다.</p></div>
+          <div class="fact"><p><span class="tag h">후속 확인</span>L1(17.0%)·S1(19.1%)의 높은 CTR이 유입 경로 구성 때문인지 영상 자체의 특성 때문인지 추가 확인이 필요합니다. 현재는 영상별 유입 경로 자료가 없어 두 영향을 구분할 수 없습니다.</p></div>
         </div>
-        <div class="insight"><small>INSIGHT</small><p>평균 조회율, 평균 시청 시간, 총 시청 시간은 서로 다른 질문에 답하는 지표입니다. <strong>콘텐츠 목적에 맞는 KPI를 먼저 정해야</strong> 같은 영상을 일관되게 평가할 수 있습니다. 유형별 사례 수가 적고 길이·주제·게시 시점이 함께 달라, 콘텐츠 유형의 효과를 입증한 것은 아닙니다.</p></div>
+        <div class="insight"><small>INSIGHT</small><p>평균 조회율, 평균 시청 지속 시간, 총 시청 시간은 서로 다른 질문에 답하는 지표입니다. <strong>콘텐츠 목적에 맞는 KPI를 먼저 정해야</strong> 같은 영상을 일관되게 평가할 수 있습니다. 유형별 사례 수가 적고 길이·주제·게시 시점이 함께 달라, 콘텐츠 유형의 효과를 입증한 것은 아닙니다.</p></div>
       </div>
     </article>
   </div>
@@ -570,19 +573,19 @@ svg text{font-family:inherit}
         <span class="no">02 · Q3·Q4에서</span>
         <h4>시청 지표는 비교 조건을 맞춘 소재끼리 본다</h4>
         <p>평균 조회율과 시청 완료율을 구분하고, 동일 소재 또는 길이·목적이 비슷한 소재끼리 비교하겠습니다. 동일 소재라도 타깃과 노출 조건이 다르면 지면 효과를 완전히 분리할 수 없다는 점을 리포트에 함께 적습니다.</p>
-        <div class="kpi-next"><small>검증 지표</small><div class="chips"><span class="chip">길이 구간별 평균 시청 시간·조회율</span><span class="chip">동일 소재 기준 지면별 완료율</span></div></div>
+        <div class="kpi-next"><small>검증 지표</small><div class="chips"><span class="chip">길이 구간별 평균 시청 지속 시간·조회율</span><span class="chip">동일 소재 기준 지면별 완료율</span></div></div>
       </div>
       <div class="card lift">
         <span class="no">03 · Q1에서</span>
         <h4>리포트 전에 합계와 세부 항목의 범위를 대조한다</h4>
-        <p>채널 합계와 영상별 합계가 41.4%만 일치했던 것처럼, 합계와 세부 항목의 범위는 다를 수 있습니다. 데일리 리포트 작성 전에 합계를 먼저 대조하고, 차이가 나면 원인을 확인하기 전까지 귀속하지 않겠습니다. 구독·전환은 신규·이탈·순증가·발생 위치를 나눠 수집하겠습니다.</p>
+        <p>현존 9개 영상의 조회수 합계는 채널 조회수의 41.4%였습니다. 이처럼 합계와 세부 항목의 집계 범위는 다를 수 있습니다. 데일리 리포트 작성 전에 합계를 먼저 대조하고, 차이가 나면 원인을 확인하기 전까지 귀속하지 않겠습니다. 구독은 신규·취소·순증가·발생 위치를 구분하고, 광고 전환은 전환 정의와 집계·기여 기간을 별도로 확인하겠습니다.</p>
         <div class="kpi-next"><small>검증 지표</small><div class="chips"><span class="chip">합계 대비 세부 합 차이율</span><span class="chip">신규·이탈·순증가·발생 위치 분리 집계</span></div></div>
       </div>
       <div class="card lift">
         <span class="no">04 · Q2에서</span>
-        <h4>단기 급증과 기본 성과를 나눠 모니터링한다</h4>
-        <p>분석 기간 조회수의 57.2%가 14일에 집중됐습니다. 급증 구간과 나머지 기간의 기본 성과를 나눠 보고, 급증이 시작되면 유입 경로와 소재를 바로 기록하겠습니다. 이번에는 급증 콘텐츠의 기여를 확정하지 못했으므로, 상위 소재 의존도는 후속 분석에서 확인할 항목입니다.</p>
-        <div class="kpi-next"><small>검증 지표</small><div class="chips"><span class="chip">급증 구간을 제외한 기본 성과 추이</span><span class="chip">상위 소재 의존도 (후속 확인)</span></div></div>
+        <h4>급증 구간과 나머지 기간의 성과를 나눠 모니터링한다</h4>
+        <p>분석 기간 조회수의 57.2%가 14일에 집중됐습니다. 급증 구간과 나머지 기간의 관측 성과를 나눠 보고, 급증이 시작되면 유입 경로와 소재를 바로 기록하겠습니다. 이번에는 급증 콘텐츠의 기여를 확정하지 못했으므로, 상위 소재 의존도는 후속 분석에서 확인할 항목입니다.</p>
+        <div class="kpi-next"><small>검증 지표</small><div class="chips"><span class="chip">급증 구간을 제외한 관측 성과 추이</span><span class="chip">상위 소재 의존도 (후속 확인)</span></div></div>
       </div>
     </div>
   </div>
@@ -593,35 +596,44 @@ svg text{font-family:inherit}
   <div class="wrap">
     <p class="sec-label">Limitations &amp; Methodology</p>
     <h2 class="sec-title">방법과 한계</h2>
-    <p class="sec-lede">사이트의 모든 수치는 분석 노트북의 출력과 같고, 확인할 수 없는 부분은 한계로 명시했습니다.</p>
+    <p class="sec-lede">주요 수치와 차트는 공개 데이터에 근거하며, 핵심 계산은 노트북에서 확인할 수 있습니다. 확인하지 못한 원인과 자료의 범위는 아래에 명시했습니다.</p>
     <div class="method">
       <div class="card" style="background:var(--bg);border-color:var(--bg)">
         <h4 style="margin-bottom:16px">데이터와 방법</h4>
         <dl class="dl">
           <div><dt>데이터</dt><dd>YouTube Studio 고급 모드 CSV(2026-11-02 추출) — 영상별 요약, 유입 경로별 요약, 유입 경로별 일별 조회수, 채널 일별 조회수·구독 순증가, 상위 5개 영상 일별 조회수</dd></div>
+          <div><dt>지표 기준</dt><dd>조회수는 모두 YouTube Studio의 '유효 조회수' 열입니다. 분석 기간에는 '조회수' 열과 값이 같고, 전체 기간 합계(95.5% 계산의 분모)도 유효 조회수 129,374회 기준입니다(일반 조회수 129,378회).</dd></div>
+          <div><dt>식별 정보</dt><dd>콘텐츠 식별 정보는 코드(L1, S1 …)로 대체했고, 원본 CSV와 매핑 파일은 별도 보관합니다. 공개 데이터의 영상별 값은 게시 연도·길이 구간·반올림 값입니다.</dd></div>
+          <div><dt>공개 데이터</dt><dd>비공개 원본은 전처리 스크립트(<code>scripts/build_public_data.py</code>)로 공개용 CSV(<code>data/processed/</code>)가 되고, 공개 분석 노트북은 이 CSV만으로 실행됩니다. 채널 단위 값은 원본 그대로, 영상별 값은 반올림 값이며, 영상별 원본에서만 구할 수 있는 집계값(L1의 급증 기간 조회수 등)은 결과값만 제공합니다.</dd></div>
           <div><dt>분석 대상</dt><dd>현존 영상 9개와, 채널 합계에서 현존 영상 합계를 뺀 잔여분(조회수·시청 시간·노출수만)</dd></div>
           <div><dt>집계 단위</dt><dd>일별: 급증·급감 확인 / 월별: 검색 유입의 지속성 / 기간 합계: 경로·영상별 성과 기여도</dd></div>
-          <div><dt>공개 상태</dt><dd>비공개 이력은 운영자 기록입니다. L2·L3·C1의 비공개 시작 시점(모두 2023년 이후)은 일별 조회수로 추정했고, 2019–2021년 L2·L3는 조회수 0이 최장 5–6일만 이어졌습니다. 나머지 영상은 시점을 확인하지 못해, 공개 상태의 영향은 확인 가능한 범위에서만 줄였습니다.</dd></div>
+          <div><dt>공개 상태</dt><dd>비공개 전환 이력은 운영자 기록이며, 정확한 전환일은 확인하지 못했습니다. 일별 조회 기록의 마지막 조회 월과 연속 조회 0일을 점검했지만, 이는 공개 상태나 전환일의 증거가 아닙니다. 공개 상태가 성과에 미친 영향은 분리하지 못했습니다.</dd></div>
           <div><dt>탐색 기준</dt><dd>CTR 해석은 노출 5,000회 이상, 시청 성과 비교는 조회 30회인 P1 제외. 분석자가 정한 기준이며 통계적 기준이 아닙니다.</dd></div>
           <div><dt>제외한 지표</dt><dd>이 기간 값이 제공되지 않는 순 시청자, 신규/재방문 시청자 등. 따라서 조회수는 도달 인원이 아닌 조회 규모로만 해석했습니다.</dd></div>
-          <div><dt>도구</dt><dd>Python(pandas), Jupyter — 노트북에 사이트 수치의 산출 과정과 분자·분모를 수록. 원본 CSV는 비공개라 공개 저장소만으로는 재실행할 수 없습니다.</dd></div>
+          <div><dt>작업 방식</dt><dd>분석 목적과 질문 설정, 데이터 추출, 결과 검토와 해석·수정 판단은 직접 했습니다. 전처리 스크립트·분석 노트북(Python, pandas, matplotlib)·결과 페이지의 초기 코드는 AI(Claude)가 작성했으며, AI(ChatGPT)의 교차 검토와 코드·문서 수정을 거쳤습니다.</dd></div>
         </dl>
       </div>
       <div class="card" style="background:var(--bg);border-color:var(--bg)">
         <h4 style="margin-bottom:16px">한계</h4>
         <ul class="lim">
           <li>영상 수가 적어 통계 검정은 하지 않았습니다. 모든 결론은 사례 관찰입니다.</li>
-          <li>잔여분은 현존 영상 목록이 완전하다는 전제의 계산값입니다. 삭제 콘텐츠의 개수와 삭제 날짜는 기록이 없어 확인하지 못했습니다.</li>
+          <li>잔여분은 현존 영상 목록이 완전하다는 전제의 계산값입니다. 목록에서 확인되지 않는 콘텐츠의 개수와 삭제 날짜·사유는 기록이 없어 확인하지 못했습니다.</li>
           <li>영상별 유입 경로 자료가 없어 경로별 시청 품질을 판단하지 않았습니다.</li>
           <li>신규·취소 구독과 구독 발생 위치 자료가 없어, 특정 영상이나 유입 경로의 구독 기여도를 확정하지 않았습니다.</li>
-          <li>영상마다 게시 시점이 달라, 누적값은 영상 자체의 성과가 아니라 분석 기간의 채널 성과 기여도입니다.</li>
+          <li>공개 노트북으로 결과 페이지의 계산은 재현할 수 있지만, 영상별 원본 집계값은 재계산할 수 없고 공개 데이터가 원본과 일치하는지는 독립적으로 검증할 수 없습니다.</li>
+          <li>영상마다 게시 시점과 관찰 기간이 달라, 누적값은 분석 기간의 채널 성과 기여도로 해석했습니다. 영상 자체의 효과를 비교하려면 같은 관찰 기간이 필요합니다.</li>
         </ul>
         <div class="redo"><small>다시 한다면</small><p>처음부터 영상 유형·길이별로 유입 경로와 신규·이탈 구독을 나눠 기록하고, 급증이 시작되면 유입 키워드와 지면을 바로 저장하겠습니다. 영상별 비교는 게시 후 첫 28일처럼 같은 관찰 기간으로 맞추겠습니다.</p></div>
       </div>
     </div>
+    <div class="sources"><b>지표·집계 기준 참고</b><br>
+      <a href="https://developers.google.com/youtube/analytics/data_model" target="_blank" rel="noopener">YouTube Analytics: 삭제 콘텐츠와 합계</a> ·
+      <a href="https://developers.google.com/youtube/analytics/metrics" target="_blank" rel="noopener">구독 지표의 집계 범위</a> ·
+      <a href="https://support.google.com/youtube/answer/7628154?hl=ko" target="_blank" rel="noopener">썸네일 노출 클릭률 설명</a>
+    </div>
     <div class="nb">
-      <div><b>분석 노트북</b><p>데이터 정제, 익명화, 집계 범위 점검, 사이트 수치의 산출 과정</p></div>
-      <a class="btn btn-blue" href="analysis.ipynb">analysis.ipynb 열기
+      <div><b>공개 분석 노트북</b><p>data/processed만으로 실행 · 사이트 수치의 산출 과정과 분자·분모 · 공개값과 원본 합계의 차이</p></div>
+      <a class="btn btn-blue" href="https://github.com/bomin7740-afk/yt-channel-analysis/blob/main/analysis.ipynb" target="_blank" rel="noopener">GitHub에서 노트북 보기
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 11L11 5m0 0H6m5 0v5"/></svg></a>
     </div>
   </div>
@@ -630,20 +642,20 @@ svg text{font-family:inherit}
 
 <footer>
   <div class="wrap">
-    <span>데이터 출처: YouTube Studio 분석(본인 채널) · 분석 기간 2019-01-13 ~ 2021-12-31 · 추출 2026-11-02</span>
-    <span><a href="analysis.ipynb">분석 노트북</a> · 원본 CSV는 식별 정보가 포함되어 공개하지 않습니다.</span>
+    <span>데이터: YouTube Studio 분석(본인 채널) · 분석 기간 2019-01-13 ~ 2021-12-31 · 2026-11-02 추출</span>
+    <span><a href="https://github.com/bomin7740-afk/yt-channel-analysis/blob/main/analysis.ipynb" target="_blank" rel="noopener">분석 노트북 (GitHub)</a></span>
   </div>
 </footer>
 
 <div class="tip" id="tip" role="tooltip"></div>
 <script>
-const D = {"months": ["2019-01", "2019-02", "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12"], "search": [426, 1335, 1995, 1455, 1177, 1009, 1375, 1850, 1088, 958, 1229, 1973, 3356, 2381, 2479, 1748, 1391, 944, 1063, 1388, 1758, 1339, 879, 1088, 1168, 879, 853, 1122, 1074, 814, 808, 863, 666, 534, 395, 465], "videos": [{"code": "L3", "type": "롱폼 음성 콘텐츠", "pub": "2019.07.28", "len": 2260, "pct": 12.1, "avg": 273, "watch": 312.4636, "views": 4114, "ctr": 11.9, "impr": 29628}, {"code": "L1", "type": "롱폼 음성 콘텐츠", "pub": "2019.01.19", "len": 2131, "pct": 10.63, "avg": 226, "watch": 1610.7941, "views": 25600, "ctr": 17.04, "impr": 127652}, {"code": "L2", "type": "롱폼 음성 콘텐츠", "pub": "2019.07.30", "len": 1353, "pct": 15.53, "avg": 210, "watch": 282.24, "views": 4836, "ctr": 8.72, "impr": 44764}, {"code": "M1", "type": "편집 영상", "pub": "2019.07.22", "len": 374, "pct": 16.72, "avg": 62, "watch": 3.5614, "views": 205, "ctr": 3.32, "impr": 4092}, {"code": "S1", "type": "콘셉트 숏폼(영상통화 형식)", "pub": "2019.07.13", "len": 231, "pct": 25.71, "avg": 59, "watch": 245.2125, "views": 14863, "ctr": 19.12, "impr": 65837}, {"code": "M2", "type": "편집 영상", "pub": "2020.09.05", "len": 141, "pct": 28.5, "avg": 40, "watch": 2.9688, "views": 266, "ctr": 11.46, "impr": 1972}, {"code": "C1", "type": "예능 클립", "pub": "2019.08.11", "len": 64, "pct": 79.11, "avg": 50, "watch": 14.1352, "views": 1005, "ctr": 6.39, "impr": 12869}, {"code": "C2", "type": "예능 클립", "pub": "2019.08.25", "len": 51, "pct": 63.21, "avg": 32, "watch": 2.2296, "views": 249, "ctr": 3.59, "impr": 5352}], "mix": {"spike": [68459, 1170, 1007], "rest": [3439, 44155, 5347]}, "weeks": ["2019-01-19", "2019-01-26", "2019-02-02", "2019-02-09", "2019-02-16", "2019-02-23", "2019-03-02", "2019-03-09", "2019-03-16", "2019-03-23", "2019-03-30", "2019-04-06", "2019-04-13", "2019-04-20", "2019-04-27", "2019-05-04", "2019-05-11", "2019-05-18", "2019-05-25", "2019-06-01", "2019-06-08", "2019-06-15", "2019-06-22", "2019-06-29", "2019-07-06", "2019-07-13", "2019-07-20", "2019-07-27", "2019-08-03", "2019-08-10", "2019-08-17", "2019-08-24", "2019-08-31", "2019-09-07", "2019-09-14", "2019-09-21", "2019-09-28", "2019-10-05", "2019-10-12", "2019-10-19", "2019-10-26", "2019-11-02", "2019-11-09", "2019-11-16", "2019-11-23", "2019-11-30", "2019-12-07", "2019-12-14", "2019-12-21", "2019-12-28", "2020-01-04", "2020-01-11", "2020-01-18", "2020-01-25", "2020-02-01", "2020-02-08", "2020-02-15", "2020-02-22", "2020-02-29", "2020-03-07", "2020-03-14", "2020-03-21", "2020-03-28", "2020-04-04", "2020-04-11", "2020-04-18", "2020-04-25", "2020-05-02", "2020-05-09", "2020-05-16", "2020-05-23", "2020-05-30", "2020-06-06", "2020-06-13", "2020-06-20", "2020-06-27", "2020-07-04", "2020-07-11", "2020-07-18", "2020-07-25", "2020-08-01", "2020-08-08", "2020-08-15", "2020-08-22", "2020-08-29", "2020-09-05", "2020-09-12", "2020-09-19", "2020-09-26", "2020-10-03", "2020-10-10", "2020-10-17", "2020-10-24", "2020-10-31", "2020-11-07", "2020-11-14", "2020-11-21", "2020-11-28", "2020-12-05", "2020-12-12", "2020-12-19", "2020-12-26", "2021-01-02", "2021-01-09", "2021-01-16", "2021-01-23", "2021-01-30", "2021-02-06", "2021-02-13", "2021-02-20", "2021-02-27", "2021-03-06", "2021-03-13", "2021-03-20", "2021-03-27", "2021-04-03", "2021-04-10", "2021-04-17", "2021-04-24", "2021-05-01", "2021-05-08", "2021-05-15", "2021-05-22", "2021-05-29", "2021-06-05", "2021-06-12", "2021-06-19", "2021-06-26", "2021-07-03", "2021-07-10", "2021-07-17", "2021-07-24", "2021-07-31", "2021-08-07", "2021-08-14", "2021-08-21", "2021-08-28", "2021-09-04", "2021-09-11", "2021-09-18", "2021-09-25", "2021-10-02", "2021-10-09", "2021-10-16", "2021-10-23", "2021-10-30", "2021-11-06", "2021-11-13", "2021-11-20", "2021-11-27", "2021-12-04", "2021-12-11", "2021-12-18", "2021-12-25", "2022-01-01"], "weekly": [135, 295, 271, 265, 336, 422, 679, 1722, 22878, 46713, 238, 262, 798, 254, 255, 265, 296, 290, 440, 251, 247, 270, 325, 256, 305, 355, 377, 433, 701, 556, 610, 386, 497, 359, 328, 275, 305, 281, 256, 237, 230, 287, 369, 357, 283, 308, 480, 388, 511, 548, 786, 936, 1041, 785, 952, 666, 598, 620, 705, 708, 632, 576, 664, 638, 551, 388, 431, 466, 432, 349, 374, 337, 296, 245, 250, 329, 237, 270, 293, 330, 305, 300, 321, 363, 470, 597, 621, 472, 460, 385, 474, 407, 238, 313, 339, 270, 255, 291, 323, 301, 308, 337, 349, 342, 381, 359, 268, 264, 209, 280, 297, 255, 224, 150, 226, 232, 203, 272, 343, 345, 323, 240, 252, 208, 255, 181, 220, 251, 260, 208, 234, 201, 207, 222, 261, 218, 196, 176, 130, 141, 248, 211, 134, 114, 127, 150, 111, 81, 107, 84, 164, 131, 129, 100, 83]};
+const D = {"months": ["2019-01", "2019-02", "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12"], "search": [426, 1335, 1995, 1455, 1177, 1009, 1375, 1850, 1088, 958, 1229, 1973, 3356, 2381, 2479, 1748, 1391, 944, 1063, 1388, 1758, 1339, 879, 1088, 1168, 879, 853, 1122, 1074, 814, 808, 863, 666, 534, 395, 465], "videos": [{"code": "L3", "type": "롱폼 음성 콘텐츠", "year": 2019, "band": "30–40분", "long": true, "pct": 12, "avg": 270, "watch": 312, "views": 4110, "ctr": 11.9, "impr": 29600}, {"code": "L1", "type": "롱폼 음성 콘텐츠", "year": 2019, "band": "30–40분", "long": true, "pct": 11, "avg": 230, "watch": 1611, "views": 25600, "ctr": 17.0, "impr": 127700}, {"code": "L2", "type": "롱폼 음성 콘텐츠", "year": 2019, "band": "20–30분", "long": true, "pct": 16, "avg": 210, "watch": 282, "views": 4840, "ctr": 8.7, "impr": 44800}, {"code": "M1", "type": "편집 영상", "year": 2019, "band": "5–10분", "long": false, "pct": 17, "avg": 60, "watch": 4, "views": 200, "ctr": 3.3, "impr": 4100}, {"code": "S1", "type": "콘셉트 영상(영상통화 형식)", "year": 2019, "band": "2–5분", "long": false, "pct": 26, "avg": 60, "watch": 245, "views": 14860, "ctr": 19.1, "impr": 65800}, {"code": "M2", "type": "편집 영상", "year": 2020, "band": "2–5분", "long": false, "pct": 28, "avg": 40, "watch": 3, "views": 270, "ctr": 11.5, "impr": 2000}, {"code": "C1", "type": "예능 클립", "year": 2019, "band": "1–2분", "long": false, "pct": 79, "avg": 50, "watch": 14, "views": 1000, "ctr": 6.4, "impr": 12900}, {"code": "C2", "type": "예능 클립", "year": 2019, "band": "1분 미만", "long": false, "pct": 63, "avg": 30, "watch": 2, "views": 250, "ctr": 3.6, "impr": 5400}], "mix": {"spike": [68459, 1170, 1007], "rest": [3439, 44155, 5347]}, "weeks": ["2019-01-19", "2019-01-26", "2019-02-02", "2019-02-09", "2019-02-16", "2019-02-23", "2019-03-02", "2019-03-09", "2019-03-16", "2019-03-23", "2019-03-30", "2019-04-06", "2019-04-13", "2019-04-20", "2019-04-27", "2019-05-04", "2019-05-11", "2019-05-18", "2019-05-25", "2019-06-01", "2019-06-08", "2019-06-15", "2019-06-22", "2019-06-29", "2019-07-06", "2019-07-13", "2019-07-20", "2019-07-27", "2019-08-03", "2019-08-10", "2019-08-17", "2019-08-24", "2019-08-31", "2019-09-07", "2019-09-14", "2019-09-21", "2019-09-28", "2019-10-05", "2019-10-12", "2019-10-19", "2019-10-26", "2019-11-02", "2019-11-09", "2019-11-16", "2019-11-23", "2019-11-30", "2019-12-07", "2019-12-14", "2019-12-21", "2019-12-28", "2020-01-04", "2020-01-11", "2020-01-18", "2020-01-25", "2020-02-01", "2020-02-08", "2020-02-15", "2020-02-22", "2020-02-29", "2020-03-07", "2020-03-14", "2020-03-21", "2020-03-28", "2020-04-04", "2020-04-11", "2020-04-18", "2020-04-25", "2020-05-02", "2020-05-09", "2020-05-16", "2020-05-23", "2020-05-30", "2020-06-06", "2020-06-13", "2020-06-20", "2020-06-27", "2020-07-04", "2020-07-11", "2020-07-18", "2020-07-25", "2020-08-01", "2020-08-08", "2020-08-15", "2020-08-22", "2020-08-29", "2020-09-05", "2020-09-12", "2020-09-19", "2020-09-26", "2020-10-03", "2020-10-10", "2020-10-17", "2020-10-24", "2020-10-31", "2020-11-07", "2020-11-14", "2020-11-21", "2020-11-28", "2020-12-05", "2020-12-12", "2020-12-19", "2020-12-26", "2021-01-02", "2021-01-09", "2021-01-16", "2021-01-23", "2021-01-30", "2021-02-06", "2021-02-13", "2021-02-20", "2021-02-27", "2021-03-06", "2021-03-13", "2021-03-20", "2021-03-27", "2021-04-03", "2021-04-10", "2021-04-17", "2021-04-24", "2021-05-01", "2021-05-08", "2021-05-15", "2021-05-22", "2021-05-29", "2021-06-05", "2021-06-12", "2021-06-19", "2021-06-26", "2021-07-03", "2021-07-10", "2021-07-17", "2021-07-24", "2021-07-31", "2021-08-07", "2021-08-14", "2021-08-21", "2021-08-28", "2021-09-04", "2021-09-11", "2021-09-18", "2021-09-25", "2021-10-02", "2021-10-09", "2021-10-16", "2021-10-23", "2021-10-30", "2021-11-06", "2021-11-13", "2021-11-20", "2021-11-27", "2021-12-04", "2021-12-11", "2021-12-18", "2021-12-25", "2022-01-01"], "weekly": [135, 295, 271, 265, 336, 422, 679, 1722, 22878, 46713, 238, 262, 798, 254, 255, 265, 296, 290, 440, 251, 247, 270, 325, 256, 305, 355, 377, 433, 701, 556, 610, 386, 497, 359, 328, 275, 305, 281, 256, 237, 230, 287, 369, 357, 283, 308, 480, 388, 511, 548, 786, 936, 1041, 785, 952, 666, 598, 620, 705, 708, 632, 576, 664, 638, 551, 388, 431, 466, 432, 349, 374, 337, 296, 245, 250, 329, 237, 270, 293, 330, 305, 300, 321, 363, 470, 597, 621, 472, 460, 385, 474, 407, 238, 313, 339, 270, 255, 291, 323, 301, 308, 337, 349, 342, 381, 359, 268, 264, 209, 280, 297, 255, 224, 150, 226, 232, 203, 272, 343, 345, 323, 240, 252, 208, 255, 181, 220, 251, 260, 208, 234, 201, 207, 222, 261, 218, 196, 176, 130, 141, 248, 211, 134, 114, 127, 150, 111, 81, 107, 84, 164, 131, 129, 100, 83]};
 const C={dark:'#202020',blue:'#2196F3',slate:'#64748B',other:'#CBD5E1',line:'#E5E7EB',axis:'#D1D5DB',ink:'#111827',ink2:'#374151',muted:'#94A3B8'};
 const NS='http://www.w3.org/2000/svg';
 const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
 const txt=(p,x,y,s,a={})=>{const t=el('text',Object.assign({x,y,'font-size':12,fill:C.muted},a),p);t.textContent=s;return t;};
 const tip=document.getElementById('tip');
-const show=(ev,html)=>{tip.innerHTML=html;tip.style.opacity=1;const x=Math.min(ev.clientX+14,innerWidth-tip.offsetWidth-8);tip.style.left=x+'px';tip.style.top=(ev.clientY+16)+'px';};
+const show=(ev,html)=>{tip.innerHTML=html;tip.style.opacity=1;const x=Math.min(ev.clientX+14,innerWidth-tip.offsetWidth-8);tip.style.left=x+'px';tip.style.top=Math.max(8,Math.min(ev.clientY+16,innerHeight-tip.offsetHeight-8))+'px';};
 const hide=()=>tip.style.opacity=0;
 const fmt=n=>n.toLocaleString('ko-KR');
 const secs=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
@@ -663,15 +675,9 @@ function drawHero(){
   const line=v.map((x,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(x).toFixed(1)).join('');
   el('path',{d:line+`L${R} ${B}L${L} ${B}Z`,fill:'url(#hg)'},s);
   el('path',{d:line,fill:'none',stroke:C.blue,'stroke-width':2,'stroke-linejoin':'round'},s);
-  const pk=v.indexOf(Math.max(...v));
-  el('circle',{cx:X(pk),cy:Y(v[pk]),r:4,fill:C.blue,stroke:'#2a2a2a','stroke-width':2},s);
-  txt(s,X(pk)+10,Y(v[pk])+4,'급증 14일 · 분석 기간 조회수의 57.2%',{fill:'#E5E7EB','font-size':12,'font-weight':600});
-  const si=D.weeks.findIndex(w=>w>='2020-06');
-  txt(s,X(si),Y(4000),'이후: 검색 유입 중심',{fill:'#9CA3AF','font-size':11.5,'text-anchor':'middle'});
-  el('line',{x1:X(si),x2:X(si),y1:Y(4000)+6,y2:Y(v[si])-8,stroke:'rgba(255,255,255,.22)','stroke-dasharray':'2 3'},s);
   const hl=el('line',{y1:T,y2:B,stroke:'rgba(255,255,255,.25)',opacity:0},s),dot=el('circle',{r:4,fill:'#fff',opacity:0},s);
   const hit=el('rect',{x:L,y:T,width:R-L,height:B-T,fill:'transparent'},s);
-  hit.addEventListener('mousemove',ev=>{const q=pt(s,ev);const i=Math.max(0,Math.min(n-1,Math.round((q.x-L)/(R-L)*(n-1))));hl.setAttribute('x1',X(i));hl.setAttribute('x2',X(i));hl.setAttribute('opacity',1);dot.setAttribute('cx',X(i));dot.setAttribute('cy',Y(v[i]));dot.setAttribute('opacity',1);show(ev,`<b>${D.weeks[i]}까지 1주</b><br>조회수 ${fmt(v[i])}회`);});
+  hit.addEventListener('mousemove',ev=>{const q=pt(s,ev);const i=Math.max(0,Math.min(n-1,Math.round((q.x-L)/(R-L)*(n-1))));hl.setAttribute('x1',X(i));hl.setAttribute('x2',X(i));hl.setAttribute('opacity',1);dot.setAttribute('cx',X(i));dot.setAttribute('cy',Y(v[i]));dot.setAttribute('opacity',1);show(ev,`<b>${D.weeks[i]} 주 종료일</b><br>조회수 ${fmt(v[i])}회<br>분석 기간 안의 날짜만 집계`);});
   hit.addEventListener('mouseleave',()=>{hide();hl.setAttribute('opacity',0);dot.setAttribute('opacity',0);});
 }
 function drawMix(){
@@ -742,23 +748,23 @@ function drawBars(id,key,max,ticks,label){
   V.forEach((v,i)=>{
     const y=T+i*rowH+7;
     txt(s,0,y+11,v.code,{fill:C.ink,'font-size':13.5,'font-weight':700});
-    txt(s,0,y+25,secs(v.len),{'font-size':11});
-    const b=el('rect',{x:L,y,width:Math.max(X(v[key])-L,3),height:22,rx:5,fill:v.len>=1200?C.blue:C.slate,style:'transition:opacity .15s'},s);
-    const val=key==='pct'?v.pct.toFixed(1)+'%':v.avg+'초';
+    txt(s,0,y+25,v.band,{'font-size':11});
+    const b=el('rect',{x:L,y,width:Math.max(X(v[key])-L,3),height:22,rx:5,fill:v.long?C.blue:C.slate,style:'transition:opacity .15s'},s);
+    const val=key==='pct'?v.pct+'%':'약 '+v.avg+'초';
     txt(s,X(v[key])+7,y+15.5,val,{fill:C.ink2,'font-size':13,'font-weight':600});
     linked[id].push(b);
     const hb=el('rect',{x:0,y:y-6,width:VW,height:rowH-2,fill:'transparent'},s);
-    hb.addEventListener('mousemove',ev=>{show(ev,`<b>${v.code} · ${v.type}</b><br>길이 ${secs(v.len)} · ${label} ${val}`);focus(i);});
+    hb.addEventListener('mousemove',ev=>{show(ev,`<b>${v.code} · ${v.type}</b><br>길이 ${v.band} · ${label} ${val}`);focus(i);});
     hb.addEventListener('mouseleave',()=>{hide();focus(-1);});
   });
 }
 function focus(i){Object.values(linked).forEach(a=>a.forEach((b,j)=>b.style.opacity=(i<0||i===j)?1:.25));document.querySelectorAll('#vtbl tr').forEach((r,j)=>r.style.background=i===j?'#F0F7FE':'');}
 function fillTable(){
   const t=document.getElementById('vtbl');
-  t.innerHTML=D.videos.map(v=>`<tr><td><b>${v.code}</b></td><td class="l">${v.type}</td><td>${v.pub}</td><td>${secs(v.len)}</td><td>${fmt(v.impr)}</td><td>${v.ctr.toFixed(2)}%${v.impr<5000?'*':''}</td><td>${fmt(v.views)}</td><td>${fmt(Math.round(v.watch))}시간</td></tr>`).join('');
+  t.innerHTML=D.videos.map(v=>`<tr><td><b>${v.code}</b></td><td class="l">${v.type}</td><td>${v.year}</td><td>${v.band}</td><td>${fmt(v.impr)}</td><td>${v.ctr.toFixed(1)}%${v.impr<5000?'*':''}</td><td>${fmt(v.views)}</td><td>${fmt(v.watch)}시간</td></tr>`).join('');
   t.querySelectorAll('tr').forEach((r,i)=>{r.addEventListener('mouseenter',()=>focus(i));r.addEventListener('mouseleave',()=>focus(-1));});
 }
-function drawAll(){drawHero();drawMix();drawSearch();drawQ3();drawBars('pct','pct',100,[0,25,50,75,100],'평균 조회율');drawBars('avg','avg',300,[0,100,200,300],'평균 시청 시간');}
+function drawAll(){drawHero();drawMix();drawSearch();drawQ3();drawBars('pct','pct',100,[0,25,50,75,100],'평균 조회율');drawBars('avg','avg',300,[0,100,200,300],'평균 시청 지속 시간');}
 fillTable();drawAll();
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(drawAll,120);});
 addEventListener('beforeprint',drawAll);addEventListener('afterprint',drawAll);
