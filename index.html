@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>영상 채널 성과 분석</title>
+<meta name="description" content="직접 운영한 영상 채널(2019–2021)의 YouTube Studio 데이터를 노출·클릭·시청·전환 퍼널로 사후 분석한 프로젝트">
+<style>
+:root{
+  color-scheme:light;
+  --page:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,.10);
+  --s-search:#2a78d6; --s-rec:#eb6834; --s-other:#c3c2b7;
+  --fact:#256abf; --est:#b46a00; --hyp:#6250d6; --tag-bg:rgba(11,11,11,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+    --s-search:#3987e5; --s-rec:#d95926; --s-other:#4a4a47;
+    --fact:#6da7ec; --est:#e0a040; --hyp:#9085e9; --tag-bg:rgba(255,255,255,.07);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0d0d0d; --surface:#1a1a19; --ink:#f0efec; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+  --s-search:#3987e5; --s-rec:#d95926; --s-other:#4a4a47;
+  --fact:#6da7ec; --est:#e0a040; --hyp:#9085e9; --tag-bg:rgba(255,255,255,.07);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;word-break:keep-all}
+main{max-width:860px;margin:0 auto;padding:56px 16px 80px}
+h1{font-size:30px;line-height:1.3;margin:0 0 12px;letter-spacing:-.01em}
+h2{font-size:22px;margin:64px 0 8px;letter-spacing:-.01em}
+h3{font-size:17px;margin:28px 0 6px}
+p{margin:0 0 14px;color:var(--ink-2)}
+p strong,li strong{color:var(--ink)}
+.eyebrow{font-size:13px;color:var(--muted);letter-spacing:.04em;margin-bottom:10px}
+.lede{font-size:17px;color:var(--ink-2);max-width:680px}
+.note{border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:14px 16px;font-size:14px;color:var(--ink-2);margin:20px 0}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:28px 0 8px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px}
+.kpi b{display:block;font-size:22px;color:var(--ink);line-height:1.2}
+.kpi span{font-size:12.5px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin:18px 0}
+.card h4{margin:0 0 2px;font-size:15px}
+.card .sub{font-size:13px;color:var(--muted);margin:0 0 14px}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;background:var(--tag-bg);margin-right:6px;vertical-align:1px}
+.tag.f{color:var(--fact)} .tag.e{color:var(--est)} .tag.h{color:var(--hyp)}
+ol.q{padding-left:20px;color:var(--ink-2)} ol.q li{margin:4px 0}
+ul{padding-left:20px;color:var(--ink-2)} li{margin:5px 0}
+table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--grid);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-weight:600;color:var(--muted);font-size:12.5px}
+td{color:var(--ink)}
+.tbl{overflow-x:auto}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin:0 0 10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{font-family:inherit}
+.tip{position:fixed;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,.12);border-radius:8px;padding:8px 10px;font-size:13px;line-height:1.5;opacity:0;transition:opacity .1s;z-index:10;white-space:nowrap}
+.rec{border-left:3px solid var(--hyp);padding:2px 0 2px 14px;margin:18px 0}
+.rec p{margin:4px 0}
+.rec .kpi-next{font-size:13.5px;color:var(--muted)}
+footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--grid);font-size:13.5px;color:var(--muted)}
+a{color:var(--fact)}
+@media (max-width:720px){
+  .kpis{grid-template-columns:repeat(2,1fr)} .kpis .kpi:last-child{grid-column:span 2}
+  .grid2{grid-template-columns:1fr}
+  h1{font-size:25px}
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">사이드 프로젝트 · 미디어 성과 분석 · 2026</div>
+  <h1>조회수를 만든 경로와 구독을 만든 경로는 같았을까</h1>
+  <p class="lede">2019–2021년 직접 운영한 엔터테인먼트 팬 콘텐츠 채널의 YouTube Studio 데이터를 <strong>노출 → 클릭 → 시청 → 전환</strong> 퍼널로 다시 읽었습니다. 채널의 인기가 아니라, 지표를 어떻게 해석하고 어디서 오해가 생기는지가 이 프로젝트의 주제입니다.</p>
+
+  <div class="kpis">
+    <div class="kpi"><b>287만</b><span>썸네일 노출수</span></div>
+    <div class="kpi"><b>3.42%</b><span>노출 클릭률(CTR)</span></div>
+    <div class="kpi"><b>12.4만</b><span>조회수</span></div>
+    <div class="kpi"><b>5,750시간</b><span>총 시청 시간</span></div>
+    <div class="kpi"><b>+218명</b><span>구독자 순증가</span></div>
+  </div>
+  <p style="font-size:13px;color:var(--muted)">채널 합계, 2019-01-13 ~ 2021-12-31 (채널 누적 조회수의 95.5%가 이 기간에 발생)</p>
+
+  <div class="note">유료 광고를 집행한 경험이 아니라, 운영이 끝난 채널의 데이터를 2026년에 <strong>사후 분석</strong>한 프로젝트입니다. 채널명·영상 제목·영상 ID는 공개하지 않으며, 영상은 유형 코드(L1, S1 …)로 표기합니다. 표기 기준: <span class="tag f">사실</span>데이터로 확인 <span class="tag e">추정</span>근거는 있으나 직접 확인 불가 <span class="tag h">가설</span>검증되지 않은 해석</div>
+
+  <h2>1. 문제 정의</h2>
+  <p>데이터를 처음 열었을 때 두 가지가 맞지 않았습니다. 현재 확인 가능한 9개 영상의 조회수를 합쳐도 채널 합계의 41%밖에 되지 않았고, 2019년 3월의 2주 동안 하루 조회수가 평소의 100배 이상으로 뛰었다가 하루 만에 끊겼습니다.</p>
+  <ol class="q">
+    <li>채널 성과는 어떤 유입 경로에서 나왔고, 그 구조는 시기별로 같았나?</li>
+    <li>유입 경로 간 지표 차이(CTR, 조회율)는 경로 자체의 특성인가?</li>
+    <li>어떤 KPI를 쓰느냐에 따라 영상 평가가 달라지나?</li>
+    <li>조회(도달)와 구독(전환)은 같은 방향으로 움직였나?</li>
+  </ol>
+
+  <h2>2. 데이터와 방법</h2>
+  <ul>
+    <li><strong>데이터:</strong> YouTube Studio 고급 모드 CSV — 영상별 요약, 유입 경로별 요약, 유입 경로별 일별 조회수, 채널 일별 조회수·구독자</li>
+    <li><strong>분석 대상:</strong> 현존 영상 9개 + 삭제 영상(D). YouTube는 삭제된 영상의 기록도 채널 합계에 남기므로, 채널 합계에서 현존 영상을 빼 D의 지표를 계산했습니다.</li>
+    <li><strong>공정 비교 조건:</strong> 비공개 이력이 있는 영상 6개 중 3개는 일별 데이터로 비공개 시점을 확인했고(모두 2023년 이후), 분석 기간에는 공개 상태였습니다. 기간을 2019–2021년으로 한정해 공개 상태 차이의 영향을 줄였습니다.</li>
+    <li><strong>제외한 것:</strong> 이 기간 값이 제공되지 않는 지표(순 시청자, 신규/재방문 시청자 등), 노출 5,000회 미만 영상의 CTR, 조회 1,000회 미만 영상의 구독 전환율</li>
+    <li><strong>도구:</strong> Python(pandas) — <a href="analysis.ipynb">분석 노트북</a>에 모든 계산 과정 수록</li>
+  </ul>
+
+  <h2>3. 채널은 두 개의 엔진으로 움직였다</h2>
+  <p><span class="tag f">사실</span>2019년 3월 9–22일의 조회수 7.06만 중 97%가 <strong>추천 동영상·탐색 기능</strong>에서 왔습니다. 채널의 추천 동영상 유입 전체 중 98.7%가 이 2주에 몰려 있습니다. 반대로 나머지 34개월의 조회수 5.29만 중 83%는 <strong>YouTube 검색</strong>에서 왔습니다.</p>
+  <div class="card">
+    <h4>기간별 유입 경로 구성</h4>
+    <p class="sub">조회수 비중, 2019–2021</p>
+    <div class="legend"><span><i style="background:var(--s-rec)"></i>추천·탐색</span><span><i style="background:var(--s-search)"></i>검색</span><span><i style="background:var(--s-other)"></i>기타</span></div>
+    <svg id="mix" viewBox="0 0 800 150" role="img" aria-label="급증 2주는 추천·탐색 97%, 그 외 기간은 검색 83%"></svg>
+  </div>
+  <div class="card">
+    <h4>월별 검색 유입 조회수</h4>
+    <p class="sub">급증이 없던 시기의 기본 수요. 업로드가 멈춘 뒤 서서히 감소</p>
+    <svg id="search" viewBox="0 0 800 260" role="img" aria-label="월별 검색 유입 조회수 추이"></svg>
+  </div>
+  <p>한 번의 알고리즘 노출이 기간 조회수의 57%를 만들었지만 2주 만에 끝났고, 이후 채널을 지탱한 것은 검색이라는 상시 수요였습니다. <strong>단발성 노출 성과와 상시 수요는 성격이 다른 성과</strong>이므로 하나의 합계로 묶어 평가하면 채널의 실제 체력을 오해하게 됩니다.</p>
+
+  <h3>급증의 주체: 삭제된 영상</h3>
+  <p><span class="tag f">사실</span>급증은 현재 남아 있지 않은(삭제된) 영상에서 발생했습니다. 급증 당시 이미 업로드돼 있던 현존 영상은 L1 하나뿐인데, L1의 같은 기간 일별 조회수는 하루 18–68회로 직전 4주 평균(48회)과 같았습니다. 나머지 8개 영상은 2019년 7월 이후 업로드됐습니다.</p>
+  <p><span class="tag e">추정</span>급증 영상은 저작권 문제로 삭제가 확인된 예능 하이라이트 편집(4분 32초)일 가능성이 높습니다. 채널 합계에서 현존 영상의 값을 빼 삭제 영상(D)의 지표를 구한 뒤, 채널의 추천 동영상 유입 지표와 비교했습니다. D 조회수의 97.6%가 급증 2주에 발생했으므로 D의 지표는 사실상 급증 영상의 지표입니다.</p>
+  <div class="card tbl">
+    <table>
+      <thead><tr><th>지표</th><th>삭제 영상 D (차감 계산)</th><th>추천 동영상 유입 (채널)</th></tr></thead>
+      <tbody>
+        <tr><td>평균 시청 시간</td><td>2분 43초</td><td>2분 45초</td></tr>
+        <tr><td>평균 조회율</td><td>59.9%</td><td>57.6%</td></tr>
+        <tr><td>영상 길이</td><td>4분 32초 (확인된 삭제 영상)</td><td>4분 46초 (역산)</td></tr>
+        <tr><td>노출 대비 조회</td><td>최대 2.8%</td><td>CTR 1.84%</td></tr>
+        <tr><td>채널 내 비중</td><td>조회 59% · 노출 90% · 구독 65%</td><td>조회 47% · 노출 84%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>근거는 세 가지입니다. ① 3월 22일 조회수 14,278회 → 다음 날 46회로 급단절(삭제와 같은 패턴), ② 독립적으로 구한 두 지표 세트가 거의 일치, ③ 추천 유입 영상의 평균 길이를 역산한 값(평균 시청 시간 ÷ 조회율)이 확인된 삭제 영상의 길이와 일치. 다만 다른 삭제 영상이 있었는지 확인할 수 없어 단정하지는 않습니다.</p>
+
+  <h2>4. 경로 간 지표 차이는 경로의 특성일까</h2>
+  <div class="card tbl">
+    <table>
+      <thead><tr><th>유입 경로</th><th>노출 비중</th><th>CTR</th><th>조회 비중</th><th>평균 조회율</th><th>평균 시청</th><th>역산 영상 길이</th></tr></thead>
+      <tbody>
+        <tr><td>추천 동영상</td><td>84.3%</td><td>1.84%</td><td>46.6%</td><td>57.6%</td><td>2:45</td><td>약 4.8분</td></tr>
+        <tr><td>YouTube 검색</td><td>9.2%</td><td>15.39%</td><td>36.7%</td><td>10.4%</td><td>2:23</td><td>약 22.8분</td></tr>
+        <tr><td>탐색 기능</td><td>5.0%</td><td>6.86%</td><td>11.6%</td><td>37.2%</td><td>3:05</td><td>약 8.3분</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><span class="tag f">사실</span>추천은 노출 규모가 크고 CTR이 낮으며, 검색은 노출 규모가 작고 CTR이 8배 높습니다. 노출형 지면과 의도 기반 지면에서 흔히 보이는 차이와 같은 방향입니다.</p>
+  <p><span class="tag f">사실</span>하지만 조회율은 경로의 특성이 아닙니다. 역산한 평균 영상 길이가 추천 약 5분, 검색 약 23분으로, <strong>경로마다 소비된 영상 유형 자체가 달랐습니다.</strong> 조회율은 영상이 길수록 기계적으로 낮아지기 때문에, "검색 유입자는 오래 보지 않는다"는 해석은 틀린 결론입니다. 경로 비교에는 CTR과 노출 규모만 쓰고, 시청 성과는 영상 길이를 통제한 뒤에 봐야 합니다.</p>
+
+  <h2>5. 어떤 KPI를 쓰느냐에 따라 평가가 뒤집힌다</h2>
+  <p>같은 영상을 조회율로 보면 짧은 클립이 가장 우수하고, 평균 시청 시간으로 보면 롱폼이 약 3.5–8.5배 앞섭니다.</p>
+  <div class="card">
+    <h4>영상별 시청 성과</h4>
+    <p class="sub">영상 길이순 · 노출 5,000회 이상 영상</p>
+    <div class="grid2">
+      <div><div style="font-size:13px;color:var(--ink-2);margin-bottom:6px">평균 조회율 (%)</div><svg id="pct" viewBox="0 0 380 250" role="img" aria-label="영상별 평균 조회율"></svg></div>
+      <div><div style="font-size:13px;color:var(--ink-2);margin-bottom:6px">평균 시청 시간 (초)</div><svg id="avg" viewBox="0 0 380 250" role="img" aria-label="영상별 평균 시청 시간"></svg></div>
+    </div>
+  </div>
+  <div class="card tbl">
+    <table>
+      <thead><tr><th>코드</th><th style="text-align:left">유형</th><th>길이</th><th>노출수</th><th>CTR</th><th>조회수</th><th>총 시청 시간</th><th>구독</th></tr></thead>
+      <tbody id="vtbl"></tbody>
+    </table>
+  </div>
+  <p><span class="tag f">사실</span>롱폼 3개의 조회율은 11–16%에 그치지만 채널 총 시청 시간의 38%를 만들었습니다. 5분 미만 영상은 조회율 26–79%지만 1회 시청이 32–59초입니다.</p>
+  <p><span class="tag h">가설</span>CTR이 가장 높은 L1(17%)과 S1(19%)은 검색 유입 비중이 높았기 때문일 수 있습니다. 영상별 유입 경로를 확보하지 않아 검증하지 못했습니다.</p>
+
+  <h2>6. 전환: 집계 단위가 결론을 바꾼다</h2>
+  <div class="card tbl">
+    <table>
+      <thead><tr><th>조회 1,000회당 구독 순증가</th><th>급증 2주 / 삭제 영상</th><th>그 외 기간 / 기타 영상</th><th>차이</th></tr></thead>
+      <tbody>
+        <tr><td>채널 일별 합계 기준</td><td>2.90명</td><td>0.25명</td><td>약 12배</td></tr>
+        <tr><td>영상별 기준</td><td>1.95명</td><td>1.50명</td><td>약 1.3배</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><span class="tag f">사실</span>채널 일별 데이터만 보면 급증 기간의 전환 효율이 12배 높아 보입니다. 하지만 영상별 데이터로 보면 삭제 영상과 현존 영상의 차이는 1.3배에 불과합니다. 현존 영상만 합쳐도 +77명인데, 같은 기간 채널 일별 합계는 +13명이었습니다.</p>
+  <p>채널 일별 순증가에는 기간 전체의 구독 취소가 함께 빠지기 때문에, 급증이 없는 시기의 전환이 과소평가됩니다. <strong>전환 규모를 키운 것은 전환율이 아니라 도달 규모</strong>였다고 보는 것이 데이터에 더 맞습니다. 단, 구독자 수는 순증가 기준이고 값이 작아 해석에 한계가 있습니다.</p>
+
+  <h2>7. 캠페인 플래닝에 적용한다면</h2>
+  <p>아래는 이 분석에서 얻은 관찰을 매체 운영에 옮겨 본 <span class="tag h">가설</span>이며, 실행해서 검증한 전략이 아닙니다.</p>
+  <div class="rec">
+    <p><strong>노출형 지면과 검색형 지면의 KPI를 분리한다.</strong> 추천·피드형은 CTR이 낮아도 도달 규모가 성과의 핵심이고, 검색형은 노출이 작아도 CTR이 높습니다. 하나의 CTR 목표로 두 지면을 평가하면 노출형 지면이 과소평가됩니다.</p>
+    <p class="kpi-next">검증 지표: 지면별 도달·CPM(노출형), CTR·검색 키워드별 전환(검색형)</p>
+  </div>
+  <div class="rec">
+    <p><strong>시청 완료율을 비교하기 전에 소재 길이를 맞춘다.</strong> 지면 간 조회율 차이의 상당 부분이 소재 길이 차이일 수 있습니다. 같은 소재를 여러 지면에 집행해 비교하거나, 길이 구간별로 나눠 봐야 합니다.</p>
+    <p class="kpi-next">검증 지표: 동일 소재 기준 지면별 완료율, 길이 구간별 평균 시청 시간</p>
+  </div>
+  <div class="rec">
+    <p><strong>전환은 합계가 아니라 소재·캠페인 단위로, 신규와 이탈을 나눠 측정한다.</strong> 합계 순증가만 보면 같은 데이터에서 12배와 1.3배라는 서로 다른 결론이 나옵니다.</p>
+    <p class="kpi-next">검증 지표: 캠페인별 신규 전환, 이탈, 순증가를 분리한 리포트</p>
+  </div>
+  <div class="rec">
+    <p><strong>단발성 노출 성과와 상시 수요를 구분해 리포트한다.</strong> 기간 조회수의 57%가 2주에 집중됐고, 해당 영상이 저작권 문제로 삭제되며 성과가 사라졌습니다. 성과가 특정 지면·소재에 집중될수록 플랫폼 리스크도 함께 커집니다.</p>
+    <p class="kpi-next">검증 지표: 상위 소재 의존도(상위 1개 소재 비중), 급증 구간을 제외한 기본 성과 추이</p>
+  </div>
+
+  <h2>8. 한계와 다시 한다면</h2>
+  <ul>
+    <li>영상 수가 적어 통계 검정은 하지 않았습니다. 모든 결론은 사례 관찰입니다.</li>
+    <li>삭제 영상 지표는 채널 합계에서 현존 영상을 뺀 값이라, 확인된 1개 외에 다른 삭제 영상이 있었다면 그 몫도 포함됩니다. 비공개 이력 영상 3개는 비공개 시점을 확인하지 못했습니다.</li>
+    <li>영상별 유입 경로 데이터를 확보하지 않아 경로 분석은 채널 단위로만 해석했습니다.</li>
+    <li>다시 운영한다면 처음부터 영상 유형·길이별로 유입 경로와 신규·이탈 구독을 분리해 기록하고, 급증 시점에 유입 키워드와 지면을 바로 저장해 두겠습니다.</li>
+  </ul>
+
+  <footer>데이터 출처: YouTube Studio 분석(본인 채널) · 분석 기간 2019-01-13 ~ 2021-12-31 · <a href="analysis.ipynb">분석 노트북</a> · 원본 CSV는 식별 정보가 포함되어 공개하지 않습니다.</footer>
+</main>
+<div class="tip" id="tip"></div>
+<script>
+const D = {"months": ["2019-01", "2019-02", "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12"], "search": [426, 1335, 1995, 1455, 1177, 1009, 1375, 1850, 1088, 958, 1229, 1973, 3356, 2381, 2479, 1748, 1391, 944, 1063, 1388, 1758, 1339, 879, 1088, 1168, 879, 853, 1122, 1074, 814, 808, 863, 666, 534, 395, 465], "videos": [{"code": "L3", "type": "롱폼 음성 콘텐츠", "len": 2260, "pct": 12.1, "avg": 273, "watch": 312, "views": 4114, "ctr": 11.9, "subs": 3, "impr": 29628}, {"code": "L1", "type": "롱폼 음성 콘텐츠", "len": 2131, "pct": 10.63, "avg": 226, "watch": 1611, "views": 25600, "ctr": 17.04, "subs": 31, "impr": 127652}, {"code": "L2", "type": "롱폼 음성 콘텐츠", "len": 1353, "pct": 15.53, "avg": 210, "watch": 282, "views": 4836, "ctr": 8.72, "subs": 13, "impr": 44764}, {"code": "S1", "type": "콘셉트 숏폼(영상통화 형식)", "len": 231, "pct": 25.71, "avg": 59, "watch": 245, "views": 14863, "ctr": 19.12, "subs": 29, "impr": 65837}, {"code": "C1", "type": "예능 클립", "len": 64, "pct": 79.11, "avg": 50, "watch": 14, "views": 1005, "ctr": 6.39, "subs": 1, "impr": 12869}, {"code": "C2", "type": "예능 클립", "len": 51, "pct": 63.21, "avg": 32, "watch": 2, "views": 249, "ctr": 3.59, "subs": 1, "impr": 5352}], "mix": {"spike": [68459, 1170, 1007], "rest": [3439, 44155, 5347]}};
+const NS='http://www.w3.org/2000/svg';
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
+const tip=document.getElementById('tip');
+const show=(ev,html)=>{tip.innerHTML=html;tip.style.opacity=1;const x=Math.min(ev.clientX+14,innerWidth-tip.offsetWidth-8);tip.style.left=x+'px';tip.style.top=(ev.clientY+14)+'px';};
+const hide=()=>tip.style.opacity=0;
+const fmt=n=>n.toLocaleString('ko-KR');
+const secs=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+
+function drawMix(){
+  const s=document.getElementById('mix');s.innerHTML='';
+  const VW=Math.max(s.parentNode.clientWidth-40,280),narrow=VW<560;
+  const rows=[['급증 2주 (2019.3.9–22)',D.mix.spike],['그 외 34개월',D.mix.rest]];
+  const names=['추천·탐색','검색','기타'],cols=['--s-rec','--s-search','--s-other'];
+  const x0=narrow?0:190,W=VW-x0-4,step=narrow?92:64;
+  s.setAttribute('viewBox',`0 0 ${VW} ${18+step*2}`);
+  rows.forEach(([lab,vals],i)=>{
+    const tot=vals.reduce((a,b)=>a+b,0),ty=18+i*step;
+    const y=narrow?ty+26:ty;
+    el('text',{x:0,y:ty+(narrow?0:20),'font-size':14,fill:css('--ink')},s).textContent=lab;
+    el('text',{x:narrow?VW:0,y:ty+(narrow?0:40),'text-anchor':narrow?'end':'start','font-size':12.5,fill:css('--muted')},s).textContent='조회수 '+fmt(tot);
+    let cx=x0;
+    vals.forEach((v,j)=>{
+      const w=v/tot*W, gap=w>4?2:0;
+      const r=el('rect',{x:cx,y:y,width:Math.max(w-gap,0.5),height:44,rx:4,fill:css(cols[j])},s);
+      const pct=(v/tot*100).toFixed(1);
+      r.addEventListener('mousemove',ev=>show(ev,`<b>${names[j]}</b><br>${fmt(v)}회 · ${pct}%`));r.addEventListener('mouseleave',hide);
+      if(w>110){const t=el('text',{x:cx+10,y:y+27,'font-size':13.5,'font-weight':600,fill:j===2?css('--ink'):'#fff','pointer-events':'none'},s);t.textContent=names[j]+' '+pct+'%';}
+      cx+=w;
+    });
+  });
+}
+function drawSearch(){
+  const s=document.getElementById('search');s.innerHTML='';
+  const VW=Math.max(s.parentNode.clientWidth-40,280);s.setAttribute('viewBox',`0 0 ${VW} 260`);
+  const L=48,R=VW-10,T=12,B=222,vals=D.search,n=vals.length,max=4000;
+  const X=i=>L+i*(R-L)/(n-1),Y=v=>B-(v/max)*(B-T);
+  [0,1000,2000,3000,4000].forEach(v=>{el('line',{x1:L,x2:R,y1:Y(v),y2:Y(v),stroke:v?css('--grid'):css('--axis'),'stroke-width':1},s);el('text',{x:L-8,y:Y(v)+4,'text-anchor':'end','font-size':12,fill:css('--muted')},s).textContent=v?fmt(v):'0';});
+  D.months.forEach((m,i)=>{if(m.endsWith('-01')||i===0){el('text',{x:X(i),y:B+22,'text-anchor':'middle','font-size':12,fill:css('--muted')},s).textContent=m.slice(0,4)+'.'+m.slice(5);}});
+  el('path',{d:vals.map((v,i)=>(i?'L':'M')+X(i)+' '+Y(v)).join(''),fill:'none',stroke:css('--s-search'),'stroke-width':2,'stroke-linejoin':'round'},s);
+  const hl=el('line',{y1:T,y2:B,stroke:css('--axis'),'stroke-width':1,opacity:0},s);
+  const dot=el('circle',{r:5,fill:css('--s-search'),stroke:css('--surface'),'stroke-width':2,opacity:0},s);
+  const hit=el('rect',{x:L,y:T,width:R-L,height:B-T,fill:'transparent'},s);
+  hit.addEventListener('mousemove',ev=>{const p=s.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;const q=p.matrixTransform(s.getScreenCTM().inverse());const i=Math.max(0,Math.min(n-1,Math.round((q.x-L)/(R-L)*(n-1))));hl.setAttribute('x1',X(i));hl.setAttribute('x2',X(i));hl.setAttribute('opacity',1);dot.setAttribute('cx',X(i));dot.setAttribute('cy',Y(vals[i]));dot.setAttribute('opacity',1);show(ev,`<b>${D.months[i]}</b><br>검색 유입 ${fmt(vals[i])}회`);});
+  hit.addEventListener('mouseleave',()=>{hide();hl.setAttribute('opacity',0);dot.setAttribute('opacity',0);});
+}
+function drawBars(id,key,max,ticks,label){
+  const s=document.getElementById(id);s.innerHTML='';
+  const VW=Math.max(s.parentNode.clientWidth,260);s.setAttribute('viewBox',`0 0 ${VW} 250`);
+  const L=44,R=VW-50,T=4,rowH=40,V=D.videos;
+  const X=v=>L+v/max*(R-L);
+  ticks.forEach(t=>{el('line',{x1:X(t),x2:X(t),y1:T,y2:T+rowH*V.length,stroke:t?css('--grid'):css('--axis')},s);el('text',{x:X(t),y:T+rowH*V.length+16,'text-anchor':'middle','font-size':11.5,fill:css('--muted')},s).textContent=t;});
+  V.forEach((v,i)=>{
+    const y=T+i*rowH+8;
+    el('text',{x:0,y:y+11,'font-size':13,fill:css('--ink'),'font-weight':600},s).textContent=v.code;
+    el('text',{x:0,y:y+25,'font-size':10.5,fill:css('--muted')},s).textContent=secs(v.len);
+    const col=css('--ink-2');
+    const r=el('rect',{x:L,y:y,width:Math.max(X(v[key])-L,2),height:22,rx:4,fill:col},s);
+    const val=key==='pct'?v.pct.toFixed(1)+'%':v.avg+'초';
+    el('text',{x:X(v[key])+6,y:y+15.5,'font-size':12.5,fill:css('--ink-2')},s).textContent=val;
+    const hb=el('rect',{x:0,y:y-6,width:VW,height:rowH-2,fill:'transparent'},s);
+    hb.addEventListener('mousemove',ev=>show(ev,`<b>${v.code} · ${v.type}</b><br>길이 ${secs(v.len)} · ${label} ${val}`));hb.addEventListener('mouseleave',hide);
+  });
+}
+function fillTable(){
+  document.getElementById('vtbl').innerHTML=D.videos.map(v=>`<tr><td>${v.code}</td><td style="text-align:left">${v.type}</td><td>${secs(v.len)}</td><td>${fmt(v.impr||0)}</td><td>${v.ctr.toFixed(2)}%</td><td>${fmt(v.views)}</td><td>${fmt(v.watch)}시간</td><td>${v.subs>0?'+':''}${v.subs}</td></tr>`).join('');
+}
+function drawAll(){drawMix();drawSearch();drawBars('pct','pct',100,[0,25,50,75,100],'평균 조회율');drawBars('avg','avg',300,[0,100,200,300],'평균 시청');}
+fillTable();drawAll();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawAll);
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(drawAll,120);});
+</script>
+</body>
+</html>
